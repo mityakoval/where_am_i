@@ -40,4 +40,17 @@ public class Weather {
     public void setWindStrength(String windStrength) {
         this.windStrength = windStrength;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this)
+            return true;
+        if(o == null || o.getClass() != this.getClass())
+            return false;
+
+        Weather compared = (Weather) o;
+
+        return (temperatureC == ((Weather) o).getTemperatureC()) && (temperatureF == ((Weather) o).getTemperatureF()) &&
+                (weatherSummary.equals(((Weather) o).getWeatherSummary())) && (windStrength.equals(((Weather) o).getWindStrength()));
+    }
 }

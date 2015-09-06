@@ -26,7 +26,7 @@ public class DataContract {
                 COLUMN_NAME_CITY + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_COUNTRY + TEXT_TYPE + ");";
 
-        public static final String SQL_DROP = "DROP TABLE IF EXISTS" + TABLE_NAME;
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
     public static abstract class Weather implements BaseColumns{
@@ -43,6 +43,6 @@ public class DataContract {
                 COLUMN_NAME_WEATHER_SUMMARY + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_WIND + TEXT_TYPE + ");";
 
-        public static final String SQL_DROP = "DROP TABLE IF EXISTS" + TABLE_NAME;
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 }

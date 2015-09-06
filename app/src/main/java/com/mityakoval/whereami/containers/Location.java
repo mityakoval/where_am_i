@@ -49,4 +49,18 @@ public class Location {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this)
+            return true;
+        if(o == null || o.getClass() != this.getClass())
+            return false;
+
+        Location compared = (Location) o;
+
+        return (longitude.equals(compared.getLongitude())) && (latitude.equals(compared.getLatitude())) &&
+                (altitude.equals(compared.getAltitude())) && (city.equals(compared.getCity()))
+                && (country.equals(compared.getCountry()));
+    }
 }

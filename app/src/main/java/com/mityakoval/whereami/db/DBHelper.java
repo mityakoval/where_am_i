@@ -38,6 +38,11 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void drop(SQLiteDatabase db){
+        db.execSQL(DataContract.Location.SQL_DROP);
+        db.execSQL(DataContract.Weather.SQL_DROP);
+    }
+
     public long addLocation(Location location){
         ContentValues values = new ContentValues();
 
