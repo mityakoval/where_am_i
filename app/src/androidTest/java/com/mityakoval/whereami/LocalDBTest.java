@@ -54,6 +54,12 @@ public class LocalDBTest extends AndroidTestCase{
         weather2.setWindStrength("6");
     }
 
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+    }
+
     public void testCreateDB(){
         DBHelper dbHelper = new DBHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

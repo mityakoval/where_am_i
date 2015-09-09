@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="clr_actionbar">#FF9108</color>
+    <color name="clr_no_location_found">#ff0000</color>
+    <color name="clr_location_found">#00ff45</color>
+    <color name="clr_pending">#fff400</color>
+</resources>
