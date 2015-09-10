@@ -63,15 +63,6 @@ public class Settings {
         JSONObject settingsJSON = new JSONObject();
 
         try{
-//            if(showLatLong)
-//                settingsJSON.put(SHOW_LAT_LONG_KEY, true);
-//            if(showCelsius) {
-//                settingsJSON.put(SHOW_CELSIUS_KEY, true);
-//                settingsJSON.put(SHOW_FAHRENHEIT_KEY, false);
-//            } else {
-//                settingsJSON.put(SHOW_CELSIUS_KEY, false);
-//                settingsJSON.put(SHOW_FAHRENHEIT_KEY, true);
-//            }
             settingsJSON.put(SHOW_LAT_LONG_KEY, showLatLong);
             settingsJSON.put(SHOW_CELSIUS_KEY, showCelsius);
             settingsJSON.put(SHOW_FAHRENHEIT_KEY, showFahrenheit);
@@ -113,7 +104,6 @@ public class Settings {
             }
             br.close();
 
-            //settingsJSON.getJSONObject(text.toString());
             settingsJSON = new JSONObject(text.toString());
             this.showLatLong = settingsJSON.getBoolean(SHOW_LAT_LONG_KEY);
             this.showCelsius = settingsJSON.getBoolean(SHOW_CELSIUS_KEY);

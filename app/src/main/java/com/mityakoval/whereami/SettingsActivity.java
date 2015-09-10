@@ -30,8 +30,6 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioButton celsiusRadio;
     private RadioButton fahrenheitRadio;
     private ToggleButton latLongToggle;
-    private Button saveButton;
-    private Button cancelButton;
     private Settings settings;
 
     @Override
@@ -42,9 +40,9 @@ public class SettingsActivity extends AppCompatActivity {
         celsiusRadio = (RadioButton) findViewById(R.id.radioButtonCelsius);
         fahrenheitRadio = (RadioButton) findViewById(R.id.radioButtonFahrenheit);
         latLongToggle = (ToggleButton) findViewById(R.id.toggleButtonLatLong);
-        saveButton = (Button) findViewById(R.id.buttonSave);
-        cancelButton = (Button) findViewById(R.id.buttonCancel);
         settings = new Settings();
+        settings.loadSettings(this);
+        updateSettingsView();
     }
 
     @Override
@@ -84,6 +82,15 @@ public class SettingsActivity extends AppCompatActivity {
             Log.e("SETTINGS", e.getLocalizedMessage());
         }
         finish();
+    }
+
+    public void updateSettingsView(){
+        if(!settings.isShowLatLong())
+            latLongToggle.setChecked(false);
+        if(!settings.isShowCelsius()) {
+            celsiusRadio.setChecked(false);
+            fahrenheitRadio.setChecked(true);
+        }
     }
 
     public void dismiss(View v){

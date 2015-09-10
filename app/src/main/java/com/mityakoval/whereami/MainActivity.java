@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.drm.DrmStore;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mityakoval.whereami.containers.Location;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     Location location;
     Settings settings;
+    RelativeLayout layout;
 
     private static final int REQUEST_CODE = 1;
 
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        layout = (RelativeLayout) findViewById(R.id.main_layout);
+        layout.setBackgroundColor(getResources().getColor(R.color.clr_pending));
         textView = (TextView) findViewById(R.id.textView);
         settings = new Settings();
         loadSettings();
@@ -79,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 location.setAltitude(String.valueOf(data.getExtras().getDouble("altitude")));
                 location.setCity(data.getExtras().getString("city"));
                 location.setCountry(data.getExtras().getString("country"));
-
-                textView.setText("You are here:");
-                textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
-                if(settings.isShowLatLong())
-                    textView.append("\nYour coordinates: " + location.getLatitude() + ", " + location.getLongitude());
-                textView.append("\nYou are " + location.getAltitude() + "m above sea level");
+                updateView();
+                ColorDrawable [] colors = {new ColorDrawable(ContextCompat.getColor(this, R.color.clr_pending)),
+                                    new ColorDrawable(ContextCompat.getColor(this, R.color.clr_location_found))};
+                TransitionDrawable transition = new TransitionDrawable(colors);
+                layout.setBackground(transition);
+                transition.startTransition(2000);
             }
         }
     }
@@ -98,6 +105,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadSettings();
+        if(location != null)
+            updateView();
+    }
+
+    public void updateView(){
+        textView.setText("You are here:");
+        textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
+        if(settings.isShowLatLong())
+            textView.append("\nCoordinates: " + location.getLatitude() + ", " + location.getLongitude());
+        textView.append("\n" + location.getAltitude() + "m above sea level");
     }
 
     public void loadSettings(){

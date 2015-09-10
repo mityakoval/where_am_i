@@ -1,4 +1,4 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -13,51 +13,63 @@
         android:layout_height="wrap_content"
         android:text="@string/show_lat_long"
         android:id="@+id/labelShowLatLong"
-        android:layout_marginStart="50dp"
-        android:textSize="25sp"
+        android:layout_marginStart="40dp"
+        android:textSize="15sp"
         android:textColor="@color/clr_black"
-        android:layout_marginTop="57dp"
-        android:layout_row="0"
-        android:layout_column="0"/>
-
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toggleButtonLatLong"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:checked="true" />
+        android:layout_marginTop="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_format"
         android:id="@+id/labelTempFormat"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:textColor="@color/clr_black"
-        android:layout_marginStart="50dp"
+        android:layout_below="@+id/toggleButtonLatLong"
+        android:layout_alignStart="@+id/labelShowLatLong"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/buttonSave"
+        android:onClick="saveSettings"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/labelShowLatLong" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:id="@+id/buttonCancel"
+        android:onClick="dismiss"
+        android:layout_alignTop="@+id/buttonSave"
+        android:layout_alignStart="@+id/radioGroupTemp" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleButtonLatLong"
+        android:checked="true"
         android:layout_marginTop="30dp"
-        android:layout_row="1"
-        android:layout_column="0" />
+        android:layout_alignEnd="@+id/radioGroupTemp" />
 
     <RadioGroup
-        android:layout_width="199dp"
-        android:layout_height="177dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/radioGroupTemp"
-        android:layout_row="1"
-        android:layout_column="1">
+        android:layout_alignTop="@+id/labelTempFormat"
+        android:layout_toEndOf="@+id/labelShowLatLong">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/radio_celsius"
             android:id="@+id/radioButtonCelsius"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
             android:textColor="@color/clr_black"
-            android:textSize="20sp"
             android:enabled="true"
             android:checked="true"
             android:clickable="true" />
@@ -67,31 +79,11 @@
             android:layout_height="wrap_content"
             android:text="@string/radio_fahrenheit"
             android:id="@+id/radioButtonFahrenheit"
-            android:layout_marginStart="20dp"
             android:textColor="@color/clr_black"
-            android:textSize="20sp"
             android:clickable="true"
             android:enabled="true" />
+
     </RadioGroup>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/buttonSave"
-        android:layout_marginStart="150dp"
-        android:layout_row="2"
-        android:layout_column="0"
-        android:onClick="saveSettings" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:id="@+id/buttonCancel"
-        android:layout_row="2"
-        android:layout_column="1"
-        android:onClick="dismiss" />
-
-
-</GridLayout>
+</RelativeLayout>
