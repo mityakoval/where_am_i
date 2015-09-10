@@ -57,7 +57,6 @@ public class LocalDBTest extends AndroidTestCase{
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-
     }
 
     public void testCreateDB(){

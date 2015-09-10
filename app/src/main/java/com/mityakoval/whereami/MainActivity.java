@@ -8,6 +8,7 @@ import android.drm.DrmStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +17,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mityakoval.whereami.containers.Location;
+import com.mityakoval.whereami.containers.Settings;
+
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActionBar actionBar;
     TextView textView;
     Location location;
+    Settings settings;
 
     private static final int REQUEST_CODE = 1;
 
@@ -30,14 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = (TextView) findViewById(R.id.textView);
-//        btnFindMe = (Button) findViewById(R.id.button);
-//        btnFindMe.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(mContext, MapsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        settings = new Settings();
+        loadSettings();
     }
 
     @Override
@@ -56,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch(id){
-            case R.id.action_history:
+            case R.id.action_settings: {
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            }
 
         }
         return super.onOptionsItemSelected(item);
@@ -74,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 location.setCity(data.getExtras().getString("city"));
                 location.setCountry(data.getExtras().getString("country"));
 
-                textView.setText("Your location: " + location.getLatitude() + ", " + location.getLongitude());
+                textView.setText("You are here:");
                 textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
+                if(settings.isShowLatLong())
+                    textView.append("\nYour coordinates: " + location.getLatitude() + ", " + location.getLongitude());
                 textView.append("\nYou are " + location.getAltitude() + "m above sea level");
             }
         }
@@ -84,5 +92,15 @@ public class MainActivity extends AppCompatActivity {
     public void launchMapsActivity(View v){
         Intent i = new Intent(this, MapsActivity.class);
         startActivityForResult(i, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSettings();
+    }
+
+    public void loadSettings(){
+        settings.loadSettings(this);
     }
 }
