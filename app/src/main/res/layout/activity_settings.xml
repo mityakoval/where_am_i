@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/show_lat_long"
         android:id="@+id/labelShowLatLong"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="60dp"
         android:textSize="15sp"
         android:textColor="@color/clr_black"
         android:layout_marginTop="45dp"

@@ -1,10 +1,8 @@
 package com.mityakoval.whereami;
 
 import android.Manifest;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
@@ -23,15 +21,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mityakoval.whereami.containers.Constants;
+import com.mityakoval.whereami.containers.Weather;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -46,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String city = null;
     private String country = null;
     private LocationRequest locationRequest;
+    private boolean initialAnimation = false;
+    private Weather weather;
 
 
     class AddressResultReceiver extends ResultReceiver {
@@ -55,9 +53,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if (resultCode == FetchAddressIntentService.Constants.SUCCESS_CODE) {
+            if (resultCode == Constants.SUCCESS_CODE) {
                 city = resultData.getString("City");
                 country = resultData.getString("Country");
+            }
+        }
+    }
+
+    class WeatherResultReceiver extends ResultReceiver {
+        public WeatherResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultCode == Constants.SUCCESS_CODE) {
+                weather = new Weather();
+                weather.setTemperatureC(resultData.getInt("tempC"));
+                weather.setTemperatureF(resultData.getInt("tempF"));
+                weather.setWeatherSummary(resultData.getString("weatherSum"));
+                weather.setWindStrength(resultData.getString("wind"));
             }
         }
     }
@@ -96,25 +111,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setLocationData(location);
         putMarker();
         if (location != null) {
-            startIntentService();
+            startAddressIntentService();
+            startWeatherIntentService();
         }
 
     }
 
     public void putMarker() {
         map.clear();
-        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
+        map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here"));
+        if(!initialAnimation){
+            initialAnimation = true;
+            animateCamera();
+        }
+    }
+
+    public void animateCamera(){
         map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(latitude, longitude))
                 .zoom(15)
+                .target(new LatLng(latitude, longitude))
                 .build()));
     }
 
-    protected void startIntentService() {
+    protected void startAddressIntentService() {
         Intent i = new Intent(this, FetchAddressIntentService.class);
         AddressResultReceiver resultReceiver = new AddressResultReceiver(new Handler());
-        i.putExtra(FetchAddressIntentService.Constants.RECEIVER, resultReceiver);
-        i.putExtra(FetchAddressIntentService.Constants.LOCATION_DATA_EXTRA, location);
+        i.putExtra(Constants.RECEIVER, resultReceiver);
+        i.putExtra(Constants.LOCATION_DATA_EXTRA, location);
+        startService(i);
+    }
+
+    protected void startWeatherIntentService() {
+        Intent i = new Intent(this, FetchWeatherService.class);
+        WeatherResultReceiver resultReceiver = new WeatherResultReceiver(new Handler());
+        i.putExtra(Constants.RECEIVER, resultReceiver);
+        i.putExtra(Constants.LOCATION_DATA_EXTRA, location);
         startService(i);
     }
 
@@ -153,6 +184,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         i.putExtra("city", city);
         i.putExtra("country", country);
 
+        if(weather != null){
+            i.putExtra("tempC", weather.getTemperatureC());
+            i.putExtra("tempF", weather.getTemperatureF());
+            i.putExtra("weatherSum", weather.getWeatherSummary());
+            i.putExtra("wind", weather.getWindStrength());
+        }
+
         setResult(RESULT_OK, i);
 
         finish();
@@ -174,7 +212,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationProvider provider;
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
-        if (provider.supportsAltitude()) {
+        if (provider.supportsAltitude() && locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -182,6 +220,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             altitude = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAltitude();
             location.setAltitude(altitude);
         }
+
+        else
+            altitude = -1000;
 
     }
 

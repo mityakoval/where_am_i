@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.drm.DrmStore;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +22,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mityakoval.whereami.containers.Constants;
 import com.mityakoval.whereami.containers.Location;
 import com.mityakoval.whereami.containers.Settings;
+import com.mityakoval.whereami.containers.Weather;
 
 import org.json.JSONObject;
 
@@ -35,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     Location location;
     Settings settings;
     RelativeLayout layout;
+    Weather weather;
 
     private static final int REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +89,21 @@ public class MainActivity extends AppCompatActivity {
                 location = new Location();
                 location.setLatitude(String.valueOf(data.getExtras().getDouble("latitude")));
                 location.setLongitude(String.valueOf(data.getExtras().getDouble("longitude")));
-                location.setAltitude(String.valueOf(data.getExtras().getDouble("altitude")));
+                if(data.getExtras().getDouble("altitude") == -1000)
+                    location.setAltitude(null);
+                else
+                    location.setAltitude(String.valueOf(data.getExtras().getDouble("altitude")));
                 location.setCity(data.getExtras().getString("city"));
                 location.setCountry(data.getExtras().getString("country"));
+
+                if(data.hasExtra("tempC")){
+                    weather = new Weather();
+                    weather.setTemperatureC(data.getExtras().getInt("tempC"));
+                    weather.setTemperatureF(data.getExtras().getInt("tempF"));
+                    weather.setWeatherSummary(data.getExtras().getString("weatherSum"));
+                    weather.setWindStrength(data.getExtras().getString("wind"));
+                }
+
                 updateView();
                 ColorDrawable [] colors = {new ColorDrawable(ContextCompat.getColor(this, R.color.clr_pending)),
                                     new ColorDrawable(ContextCompat.getColor(this, R.color.clr_location_found))};
@@ -112,9 +130,23 @@ public class MainActivity extends AppCompatActivity {
     public void updateView(){
         textView.setText("You are here:");
         textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
-        if(settings.isShowLatLong())
+        if(settings.isShowDetails()) {
             textView.append("\nCoordinates: " + location.getLatitude() + ", " + location.getLongitude());
-        textView.append("\n" + location.getAltitude() + "m above sea level");
+            if (location.getAltitude() != null)
+                textView.append("\n" + location.getAltitude() + "m above sea level");
+            else
+                textView.append("\nAltitude is not available due to GPS problems");
+        }
+
+        if(weather != null) {
+            textView.append("\n\nCurrently it is " + weather.getWeatherSummary() + " in " + location.getCity());
+            if(settings.isShowCelsius())
+                textView.append("\nTemperature is " + weather.getTemperatureC() + "C");
+            else
+                textView.append("\nTemperature is " + weather.getTemperatureF() + "F");
+            textView.append("\nWind speed is about " + weather.getWindStrength() + "kmph");
+        }
+
     }
 
     public void loadSettings(){

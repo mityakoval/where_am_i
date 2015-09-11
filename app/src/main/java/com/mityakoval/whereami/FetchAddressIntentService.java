@@ -8,6 +8,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
+import com.mityakoval.whereami.containers.Constants;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +63,5 @@ public class FetchAddressIntentService extends IntentService {
         resultReceiver.send(resultCode, bundle);
     }
 
-    public final class Constants{
-        public static final int SUCCESS_CODE = 0;
-        public static final int FAILURE_CODE = 1;
-        public static final String PACKAGE_NAME = "com.mityakoval.whereami";
-        public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
-        public static final String RESULT_DATA_KEY = PACKAGE_NAME +
-                ".RESULT_DATA_KEY";
-        public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
-                ".LOCATION_DATA_EXTRA";
-    }
+
 }

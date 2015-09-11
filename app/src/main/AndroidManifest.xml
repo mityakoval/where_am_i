@@ -29,6 +29,10 @@
             android:name=".FetchAddressIntentService"
             android:exported="false" />
 
+        <service
+            android:name=".FetchWeatherService"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:icon="@drawable/app_logo"

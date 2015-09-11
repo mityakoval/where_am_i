@@ -20,6 +20,8 @@ android {
             debuggable true
         }
     }
+
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {

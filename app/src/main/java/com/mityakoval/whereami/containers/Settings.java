@@ -34,11 +34,11 @@ public class Settings {
         this.showFahrenheit = false;
     }
 
-    public boolean isShowLatLong() {
+    public boolean isShowDetails() {
         return showLatLong;
     }
 
-    public void setShowLatLong(boolean showLatLong) {
+    public void setShowDetails(boolean showLatLong) {
         this.showLatLong = showLatLong;
     }
 

@@ -64,9 +64,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void saveSettings(View v) {
         if(latLongToggle.isChecked())
-            settings.setShowLatLong(true);
+            settings.setShowDetails(true);
         else
-            settings.setShowLatLong(false);
+            settings.setShowDetails(false);
 
         if(radioGroup.getCheckedRadioButtonId() == celsiusRadio.getId()){
             settings.setShowCelsius(true);
@@ -85,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void updateSettingsView(){
-        if(!settings.isShowLatLong())
+        if(!settings.isShowDetails())
             latLongToggle.setChecked(false);
         if(!settings.isShowCelsius()) {
             celsiusRadio.setChecked(false);
