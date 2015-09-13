@@ -13,4 +13,7 @@
     <string name="radio_fahrenheit">Fahrenheit</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="date_placholder">01/01/2015</string>
+    <string name="city_placeholder">City, Country</string>
+    <string name="weather_placeholder">Sunny - 14C (57F)</string>
 </resources>

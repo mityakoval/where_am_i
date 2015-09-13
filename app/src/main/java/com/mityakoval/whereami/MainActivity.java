@@ -26,12 +26,14 @@ import com.mityakoval.whereami.containers.Constants;
 import com.mityakoval.whereami.containers.Location;
 import com.mityakoval.whereami.containers.Settings;
 import com.mityakoval.whereami.containers.Weather;
+import com.mityakoval.whereami.db.DBHelper;
 
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadSettings();
+        if(location != null)
+            updateView();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -73,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.action_settings: {
                 Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            }
+
+            case R.id.action_history:{
+                Intent i = new Intent(this, LocationHistoryActivity.class);
                 startActivity(i);
                 break;
             }
@@ -104,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
                     weather.setWindStrength(data.getExtras().getString("wind"));
                 }
 
+                saveData(location, weather);
+
                 updateView();
                 ColorDrawable [] colors = {new ColorDrawable(ContextCompat.getColor(this, R.color.clr_pending)),
                                     new ColorDrawable(ContextCompat.getColor(this, R.color.clr_location_found))};
@@ -117,14 +135,6 @@ public class MainActivity extends AppCompatActivity {
     public void launchMapsActivity(View v){
         Intent i = new Intent(this, MapsActivity.class);
         startActivityForResult(i, REQUEST_CODE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadSettings();
-        if(location != null)
-            updateView();
     }
 
     public void updateView(){
@@ -151,5 +161,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadSettings(){
         settings.loadSettings(this);
+    }
+
+    public void saveData(Location location, Weather weather){
+        DBHelper dbHelper = new DBHelper(this);
+
+        if(location != null){
+            dbHelper.addLocation(location);
+        }
+
+        if (weather != null){
+            dbHelper.addWeather(weather);
+        }
     }
 }

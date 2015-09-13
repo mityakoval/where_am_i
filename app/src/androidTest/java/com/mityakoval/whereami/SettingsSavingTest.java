@@ -16,7 +16,7 @@ public class SettingsSavingTest extends AndroidTestCase{
     public void setUp() throws Exception {
         super.setUp();
         settingsCustom = new Settings();
-        settingsCustom.setShowLatLong(false);
+        settingsCustom.setShowDetails(false);
         settingsCustom.setShowCelsius(false);
         settingsCustom.setShowFahrenheit(true);
 
@@ -29,7 +29,7 @@ public class SettingsSavingTest extends AndroidTestCase{
 
     public void testLoadSettings() throws Exception {
         settingsCustom.loadSettings(mContext);
-        assertNotSame(settingsDefault.isShowLatLong(), settingsCustom.isShowLatLong());
+        assertNotSame(settingsDefault.isShowDetails(), settingsCustom.isShowDetails());
         assertNotSame(settingsDefault.isShowCelsius(), settingsCustom.isShowCelsius());
         assertNotSame(settingsDefault.isShowFahrenheit(), settingsCustom.isShowFahrenheit());
     }

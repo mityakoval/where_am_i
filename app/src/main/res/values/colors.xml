@@ -5,4 +5,5 @@
     <color name="clr_location_found">#7ee75f</color>
     <color name="clr_pending">#fff400</color>
     <color name="clr_black">#000000</color>
+    <color name="clr_blue">#003aef</color>
 </resources>

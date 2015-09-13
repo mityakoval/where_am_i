@@ -67,6 +67,10 @@ public class DBHelper extends SQLiteOpenHelper {
                                  DataContract.Location.COLUMN_NAME_COUNTRY};
 
         Cursor c = readableDb.query(DataContract.Location.TABLE_NAME, projection, null, null, null, null, null);
+
+        if(c == null || c.getCount() <= 0)
+            return null;
+
         c.moveToFirst();
 
         locations = new ArrayList<>();
@@ -110,6 +114,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 DataContract.Weather.COLUMN_NAME_WIND};
 
         Cursor c = readableDb.query(DataContract.Weather.TABLE_NAME, projection, null, null, null, null, null);
+
+        if(c == null || c.getCount() <= 0)
+            return null;
+
         c.moveToFirst();
 
         allWeather = new ArrayList<>();

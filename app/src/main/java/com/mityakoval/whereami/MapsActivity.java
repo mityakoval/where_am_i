@@ -29,6 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mityakoval.whereami.containers.Constants;
 import com.mityakoval.whereami.containers.Weather;
 
+import java.text.DecimalFormat;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -178,6 +180,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent i = new Intent();
 
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        altitude = Double.parseDouble(decimalFormat.format(altitude));
         i.putExtra("latitude", latitude);
         i.putExtra("longitude", longitude);
         i.putExtra("altitude", altitude);
