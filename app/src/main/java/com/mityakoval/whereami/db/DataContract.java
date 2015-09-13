@@ -17,6 +17,7 @@ public class DataContract {
         public static final String COLUMN_NAME_ALTITUDE = "altitude";
         public static final String COLUMN_NAME_CITY = "city";
         public static final String COLUMN_NAME_COUNTRY = "country";
+        public static final String COLUMN_NAME_DATE = "date";
 
         public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
                 _ID + " INTEGER PRIMARY KEY NOT NULL," +
@@ -24,7 +25,8 @@ public class DataContract {
                 COLUMN_NAME_LONGITUDE + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_ALTITUDE + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_CITY + TEXT_TYPE + COMMA_SEP +
-                COLUMN_NAME_COUNTRY + TEXT_TYPE + ");";
+                COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP+
+                COLUMN_NAME_DATE + TEXT_TYPE + ");";
 
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

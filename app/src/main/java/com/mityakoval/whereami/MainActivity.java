@@ -33,7 +33,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -111,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
                     location.setAltitude(String.valueOf(data.getExtras().getDouble("altitude")));
                 location.setCity(data.getExtras().getString("city"));
                 location.setCountry(data.getExtras().getString("country"));
+
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy\n hh:mm:ss", Locale.US);
+                dateFormat.setLenient(false);
+                Date today = new Date();
+                location.setDate(dateFormat.format(today));
 
                 if(data.hasExtra("tempC")){
                     weather = new Weather();

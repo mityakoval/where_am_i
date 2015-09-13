@@ -51,6 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DataContract.Location.COLUMN_NAME_ALTITUDE, location.getAltitude());
         values.put(DataContract.Location.COLUMN_NAME_CITY, location.getCity());
         values.put(DataContract.Location.COLUMN_NAME_COUNTRY, location.getCountry());
+        values.put(DataContract.Location.COLUMN_NAME_DATE, location.getDate());
 
         return writableDb.insert(DataContract.Location.TABLE_NAME, null, values);
     }
@@ -64,7 +65,8 @@ public class DBHelper extends SQLiteOpenHelper {
                                  DataContract.Location.COLUMN_NAME_LONGITUDE,
                                  DataContract.Location.COLUMN_NAME_ALTITUDE,
                                  DataContract.Location.COLUMN_NAME_CITY,
-                                 DataContract.Location.COLUMN_NAME_COUNTRY};
+                                 DataContract.Location.COLUMN_NAME_COUNTRY,
+                                 DataContract.Location.COLUMN_NAME_DATE};
 
         Cursor c = readableDb.query(DataContract.Location.TABLE_NAME, projection, null, null, null, null, null);
 
@@ -83,6 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
             location.setAltitude(c.getString(c.getColumnIndexOrThrow(DataContract.Location.COLUMN_NAME_ALTITUDE)));
             location.setCity(c.getString(c.getColumnIndexOrThrow(DataContract.Location.COLUMN_NAME_CITY)));
             location.setCountry(c.getString(c.getColumnIndexOrThrow(DataContract.Location.COLUMN_NAME_COUNTRY)));
+            location.setDate(c.getString(c.getColumnIndexOrThrow(DataContract.Location.COLUMN_NAME_DATE)));
 
             locations.add(location);
         } while (c.moveToNext());

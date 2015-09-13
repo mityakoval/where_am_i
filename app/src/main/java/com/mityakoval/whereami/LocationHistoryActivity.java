@@ -126,8 +126,8 @@ public class LocationHistoryActivity extends AppCompatActivity {
 
             if(locationData != null){
                 historyData = new ArrayList<>();
-                HistoryData historyDataItem = new HistoryData();
                 for (int i=0; i < locationData.size(); i++) {
+                    HistoryData historyDataItem = new HistoryData();
                     historyDataItem.setCity(locationData.get(i).getCity());
                     historyDataItem.setCountry(locationData.get(i).getCountry());
 
@@ -137,10 +137,8 @@ public class LocationHistoryActivity extends AppCompatActivity {
                         historyDataItem.setTempF(String.valueOf(weatherData.get(i).getTemperatureF()));
                     }
 
-                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                    dateFormat.setLenient(false);
-                    Date today = new Date();
-                    historyDataItem.setTodayDate(dateFormat.format(today));
+
+                    historyDataItem.setTodayDate(locationData.get(i).getDate());
                     historyData.add(historyDataItem);
                 }
             }
