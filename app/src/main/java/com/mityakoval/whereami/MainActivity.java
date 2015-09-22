@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.drm.DrmStore;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -102,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT || newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            if(location != null)
+                updateView();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){
@@ -132,11 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 saveData(location, weather);
 
                 updateView();
-                ColorDrawable [] colors = {new ColorDrawable(ContextCompat.getColor(this, R.color.clr_pending)),
-                                    new ColorDrawable(ContextCompat.getColor(this, R.color.clr_location_found))};
-                TransitionDrawable transition = new TransitionDrawable(colors);
-                layout.setBackground(transition);
-                transition.startTransition(2000);
             }
         }
     }
@@ -148,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateView(){
         textView.setText("You are here:");
-        textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
+        if(location.getCity() != null)
+            textView.append("\nCity: " + location.getCity() + ", " + location.getCountry());
         if(settings.isShowDetails()) {
             textView.append("\nCoordinates: " + location.getLatitude() + ", " + location.getLongitude());
             if (location.getAltitude() != null)
@@ -164,8 +169,14 @@ public class MainActivity extends AppCompatActivity {
             else
                 textView.append("\nTemperature is " + weather.getTemperatureF() + "F");
             textView.append("\nWind speed is about " + weather.getWindStrength() + "kmph");
-        }
+        } else
+            textView.append("\n\nUnable to get weather conditions");
 
+        ColorDrawable [] colors = {new ColorDrawable(ContextCompat.getColor(this, R.color.clr_pending)),
+                new ColorDrawable(ContextCompat.getColor(this, R.color.clr_location_found))};
+        TransitionDrawable transition = new TransitionDrawable(colors);
+        layout.setBackground(transition);
+        transition.startTransition(1000);
     }
 
     public void loadSettings(){

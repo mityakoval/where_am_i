@@ -115,8 +115,11 @@ public class LocationHistoryActivity extends AppCompatActivity {
             HistoryData historyItem = historyData.get(position);
             date.setText(historyItem.getTodayDate());
             city.setText(historyItem.getCity() + ", " + historyItem.getCountry());
-            weather.setText(historyItem.getWeatherSummary() + " - " + historyItem.getTempC() + "C (" +
-                historyItem.getTempF() + "F)");
+            if(historyItem.getTempC() != null)
+                weather.setText(historyItem.getWeatherSummary() + " - " + historyItem.getTempC() + "C (" +
+                    historyItem.getTempF() + "F)");
+            else
+                weather.setText("No weather details");
 
             return convertView;
         }

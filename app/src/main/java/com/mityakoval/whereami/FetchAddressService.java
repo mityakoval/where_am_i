@@ -18,15 +18,15 @@ import java.util.Locale;
 /**
  * Created by mityakoval on 09/09/15.
  */
-public class FetchAddressIntentService extends IntentService {
+public class FetchAddressService extends IntentService {
 
     private ResultReceiver resultReceiver;
 
-    public FetchAddressIntentService(String name) {
+    public FetchAddressService(String name) {
         super(name);
     }
 
-    public FetchAddressIntentService(){
+    public FetchAddressService(){
         super(null);
     }
 
@@ -58,8 +58,10 @@ public class FetchAddressIntentService extends IntentService {
     private void deliverResultToReceiver(int resultCode, String message, Address address) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
-        bundle.putString("City", address.getLocality());
-        bundle.putString("Country", address.getCountryName());
+        if (address != null) {
+            bundle.putString("City", address.getLocality());
+            bundle.putString("Country", address.getCountryName());
+        }
         resultReceiver.send(resultCode, bundle);
     }
 

@@ -32,8 +32,8 @@ import com.mityakoval.whereami.containers.Weather;
 import java.text.DecimalFormat;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private GoogleApiClient googleApiClient;
     GoogleMap map;
@@ -83,7 +83,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Try to obtain the map from the SupportMapFragment.
         if (checkGooglePlayServices()) {
             map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -136,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void startAddressIntentService() {
-        Intent i = new Intent(this, FetchAddressIntentService.class);
+        Intent i = new Intent(this, FetchAddressService.class);
         AddressResultReceiver resultReceiver = new AddressResultReceiver(new Handler());
         i.putExtra(Constants.RECEIVER, resultReceiver);
         i.putExtra(Constants.LOCATION_DATA_EXTRA, location);
@@ -212,21 +211,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.location = location;
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        LocationManager locationManager;
-        LocationProvider provider;
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
-        if (provider.supportsAltitude() && locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            altitude = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAltitude();
-            location.setAltitude(altitude);
+        if(location.getAltitude() != 0.0)
+            altitude = location.getAltitude();
+        else {
+            LocationManager locationManager;
+            LocationProvider provider;
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            provider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+            if (provider.supportsAltitude() && locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                altitude = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAltitude();
+                location.setAltitude(altitude);
+            } else
+                altitude = -1000;
         }
-
-        else
-            altitude = -1000;
 
     }
 

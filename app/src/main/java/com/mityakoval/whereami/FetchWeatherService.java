@@ -74,10 +74,12 @@ public class FetchWeatherService extends IntentService {
     public void deliverResults(int resultCode, String message, Weather weatherInfo){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
-        bundle.putInt("tempC", weatherInfo.getTemperatureC());
-        bundle.putInt("tempF", weatherInfo.getTemperatureF());
-        bundle.putString("weatherSum", weatherInfo.getWeatherSummary());
-        bundle.putString("wind", weatherInfo.getWindStrength());
+        if(weatherInfo != null) {
+            bundle.putInt("tempC", weatherInfo.getTemperatureC());
+            bundle.putInt("tempF", weatherInfo.getTemperatureF());
+            bundle.putString("weatherSum", weatherInfo.getWeatherSummary());
+            bundle.putString("wind", weatherInfo.getWindStrength());
+        }
         resultReceiver.send(resultCode, bundle);
     }
 
